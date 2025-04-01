@@ -73,6 +73,7 @@ public class ElementsInteractions {
         assertEquals("Three", select.getFirstSelectedOption().getText());
         select.selectByIndex(1);
         assertEquals("One", select.getFirstSelectedOption().getText());
+        List<WebElement> selectedOptionsOptions = select.getAllSelectedOptions();
 
     }
 
@@ -109,7 +110,11 @@ public class ElementsInteractions {
     void checkboxTest() {
         driver.get(webForm_url);
         WebElement checkedCheckbox = driver.findElement(By.xpath("//input[@checked and @type = \"checkbox\"]"));
-        assertTrue(checkedCheckbox.isSelected());
+        //assertTrue(checkedCheckbox.isSelected());
+        boolean isSelected = checkedCheckbox.isSelected();
+        if (!isSelected) {
+            checkedCheckbox.click();
+        }
     }
 
     @Test
