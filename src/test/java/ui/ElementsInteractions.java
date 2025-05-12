@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.Select;
 import java.io.File;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ElementsInteractions {
@@ -50,10 +51,28 @@ public class ElementsInteractions {
     }
 
     @Test
-    void disabledFieldTest() {
+    void textInputField() {
         driver.get(webForm_url);
+        WebElement textField = driver.findElement(By.name("my-textarea"));
+        textField.sendKeys("mytext");
+        WebElement submitButton = driver.findElement(By.tagName("button"));
+        actions.moveToElement(submitButton).perform();
+        submitButton.click();  //this part of test also checks Submit button
+        //driver.findElement(By.tagName("button")).click(); //this part of test also checks Submit button
+        WebElement title = driver.findElement(By.className("display-6"));
+        assertEquals("Form submitted", title.getText());
+    }
+
+    @Test
+    void disabledFieldTest() {
+        //driver.get(webForm_url);
+        driver.get(BASE_URL);
+        driver.findElement(By.linkText("Web form")).click();
         WebElement disabledField = driver.findElement(By.cssSelector("input[placeholder='Disabled input']"));
         assertFalse(disabledField.isEnabled());
+        Exception throwm = assertThrows(ElementNotInteractableException.class, () -> disabledField.sendKeys("mytext"));
+        assertThat(throwm.getMessage()).contains("element not interactable");
+
     }
 
     @Test
